@@ -15,7 +15,7 @@ export const Home = () => {
   return (
     <>
       <img
-        src="./images/home-page.png"
+        src={process.env.PUBLIC_URL+'/home-page.png'}
         alt="home-page"
         width="100%"
         height="100%"

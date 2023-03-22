@@ -131,7 +131,7 @@ const Courses = () => {
                       width="30%"
                       height="200"
                       variant="top"
-                      src={each.courseImg}
+                      src={process.env.PUBLIC_URL+each.courseImg}
                       style={{ width: "30%" }}
                     />
                     <Card.Text>
@@ -192,7 +192,7 @@ const Courses = () => {
                             <ReactPlayer
                               className="react-player"
                               controls={true}
-                              url={eachitem.levelVideo}
+                              url={process.env.PUBLIC_URL+eachitem.levelVideo}
                               width="30%"
                               height="30%"
                               onProgress={(progress) =>
