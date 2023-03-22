@@ -10,7 +10,7 @@ export const NavigationBar = () => {
   return (
     <NavBarWrapper>
     <Navbar bg="primary" expand="lg" variant="dark">
-      <HomePageTitle><a href="/home">Smart Learning</a></HomePageTitle>
+      <HomePageTitle><a  onClick={() => navigate("/home")}>Smart Learning</a></HomePageTitle>
       <Container>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav ">
