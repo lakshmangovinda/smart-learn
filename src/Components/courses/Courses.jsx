@@ -4,13 +4,14 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
-import courses from "../../Utils/cources.json";
+import data from '../../Utils/cources'
 import { db } from "../../Utils/firebase-config";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import ReactPlayer from "react-player/lazy";
 
 const Courses = () => {
-  const [listOfCourses, setListOfCourses] = useState(courses);
+  console.log(data)
+  const [listOfCourses, setListOfCourses] = useState(data);
   const [CoursesOfUser, setCoursesOfUser] = useState([]);
   const [watchedCoursesList, setWatchedCoursesList] = useState([]);
   const userToken = sessionStorage.getItem("token");
@@ -131,7 +132,7 @@ const Courses = () => {
                       width="30%"
                       height="200"
                       variant="top"
-                      src={process.env.PUBLIC_URL+each.courseImg}
+                      src={each.courseImg}
                       style={{ width: "30%" }}
                     />
                     <Card.Text>
@@ -192,7 +193,7 @@ const Courses = () => {
                             <ReactPlayer
                               className="react-player"
                               controls={true}
-                              url={process.env.PUBLIC_URL+eachitem.levelVideo}
+                              url={eachitem.levelVideo}
                               width="30%"
                               height="30%"
                               onProgress={(progress) =>

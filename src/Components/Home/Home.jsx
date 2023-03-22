@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Homepageimage from '../../images/home-page.png'
 
 export const HomePageWrapper = styled.div`
   position: absolute;
@@ -15,7 +16,7 @@ export const Home = () => {
   return (
     <>
       <img
-        src={process.env.PUBLIC_URL+'/home-page.png'}
+        src={Homepageimage}
         alt="home-page"
         width="100%"
         height="100%"
