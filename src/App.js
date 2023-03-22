@@ -1,5 +1,5 @@
 import "./App.css";
-import NavigationBar from "./navigation/NavigationBar";
+import NavigationBar from "./Components/navigation/NavigationBar";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import Login from "./Components/login/Login";
 import Register from "./Components/login/Register";
