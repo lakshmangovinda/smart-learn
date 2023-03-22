@@ -2,12 +2,13 @@ import styled from "styled-components";
 
 export const HomePageTitle = styled.div`
   a {
-    color: white;
-    font-size: 40px;
-    font-family: system-ui;
+    color: white !important;
+    font-size: 40px ;
+    font-family: system-ui ;
     font-weight: 600;
-    text-decoration: none;
-    padding: 2rem;
+    text-decoration: none !important;
+    padding: 2rem ;
+    cursor: pointer !important;
   }
 `;
 
