@@ -1,4 +1,4 @@
-export default function About(){
+export const About = () => {
     return(
     <div>
 <section>
@@ -35,3 +35,5 @@ export default function About(){
         
     )
 }
+
+export default About;

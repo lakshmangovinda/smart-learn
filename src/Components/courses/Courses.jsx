@@ -5,18 +5,15 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import courses from "../../Utils/cources.json";
-import Collapse from "react-bootstrap/Collapse";
 import { db } from "../../Utils/firebase-config";
-import { collection, addDoc, getDocs, doc } from "firebase/firestore";
+import { collection, addDoc, getDocs } from "firebase/firestore";
 import ReactPlayer from "react-player/lazy";
 
-
 const Courses = () => {
-  const [open, setOpen] = useState(false);
-  const [opencollpase, setCollapse] = useState(false);
+  const [listOfCourses, setListOfCourses] = useState(courses);
   const [CoursesOfUser, setCoursesOfUser] = useState([]);
   const [watchedCoursesList, setWatchedCoursesList] = useState([]);
-  const [userToken, setUserToken] = useState(sessionStorage.getItem("token"));
+  const userToken = sessionStorage.getItem("token");
   async function fetchAllData() {
     const querySnapshot = await getDocs(collection(db, "Courses-List"));
     const data = querySnapshot.docs.map((doc) => doc.data());
@@ -32,7 +29,7 @@ const Courses = () => {
       .then((data) => {
         let enrolledCourses = [];
         data.forEach((eachItem) => {
-          if (eachItem.uid == userToken) {
+          if (eachItem.uid === userToken) {
             let cid = eachItem["item"]["courseId"];
             enrolledCourses.push(cid);
           }
@@ -42,19 +39,30 @@ const Courses = () => {
       .catch((error) => {
         console.log("Error fetching data: ", error);
       });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const expandingCourse = (courseId) => {
+    let updatedCourses = [...listOfCourses];
+    const objIndex = updatedCourses.findIndex(
+      (obj) => obj.courseId === courseId
+    );
+    updatedCourses[objIndex].viewDetails =
+      !updatedCourses[objIndex].viewDetails;
+    setListOfCourses(updatedCourses);
+  };
+
   const handleProgress = (progress, courseLevelId, courseName) => {
     fetchAllVideos()
       .then((data) => {
         let watchedCourses = [];
-
-        if (data.length != 0) {
+        if (data.length !== 0) {
           data.forEach((eachItem) => {
             console.log(eachItem);
-            if (eachItem.uid == userToken) {
+            if (eachItem.uid === userToken) {
               let cid = eachItem.courseLevelId;
-              if (cid != courseLevelId) {
-                if (progress.played == 1) {
+              if (cid !== courseLevelId) {
+                if (progress.played === 1) {
                   console.log("yes");
                   addDoc(collection(db, "watched-videos"), {
                     uid: userToken.toString(),
@@ -81,6 +89,7 @@ const Courses = () => {
         console.log("Error fetching data: ", error);
       });
   };
+
   const handleSubmit = (data) => {
     addDoc(collection(db, "Courses-List"), {
       uid: userToken.toString(),
@@ -91,7 +100,7 @@ const Courses = () => {
         let enrolledCourses = [];
 
         data.forEach((eachItem) => {
-          if (eachItem.uid.toString() == userToken.toString()) {
+          if (eachItem.uid.toString() === userToken.toString()) {
             let cid = eachItem["item"]["courseId"];
             enrolledCourses.push(cid);
           }
@@ -107,7 +116,7 @@ const Courses = () => {
     <>
       <Container fluid="true">
         <Row>
-          {courses.map((each, index) => {
+          {listOfCourses.map((each, index) => {
             return (
               <Col
                 md={{ span: 10, offset: 1 }}
@@ -126,7 +135,9 @@ const Courses = () => {
                       style={{ width: "30%" }}
                     />
                     <Card.Text>
-                      Enroll the <strong>{each.courseName}</strong> . today....
+                      <p className="mt-3">Enroll the <strong>{each.courseName}</strong> . today....</p>
+                      <p>We like to say, if our best clients and our organisation were people, they’d be friends. We want to understand your business and sit beside you at the table, not across from you. We’re built to help you understand and leverage technology all the way from the Reception Desk to the Board Room. We’re big on the cloud and the opportunity it presents.</p>
+				              <p>Whether your requirements are totally on-premises, totally in the cloud, or somewhere in between, Evologic is flexible in its application of the right technology. IT has to work for you.</p>
                     </Card.Text>
                     <div className="d-flex justify-content-end justify-content-space-between">
                       {CoursesOfUser.includes(each.courseId) ? (
@@ -147,63 +158,66 @@ const Courses = () => {
                         </Button>
                       )}
 
-                      <Button
-                        variant="primary"
-                        size="lg"
-                        style={{ marginLeft: "10px" }}
-                        onClick={() => {
-                          each.viewDeatils = !each.viewDeatils;
-                          setCollapse(!each.viewDeatils);
-                        }}
-                        aria-controls="example-collapse-text"
-                        aria-expanded={each.viewDeatils}
-                      >
-                        View Details
-                      </Button>
-                      {each.viewDeatils}
+                      {each.viewDetails ? (
+                        <Button
+                          variant="primary"
+                          size="lg"
+                          style={{ marginLeft: "10px" }}
+                          onClick={() => expandingCourse(each.courseId)}
+                          aria-controls="example-collapse-text"
+                        >
+                          Hide details
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="primary"
+                          size="lg"
+                          style={{ marginLeft: "10px" }}
+                          onClick={() => expandingCourse(each.courseId)}
+                          disabled={!CoursesOfUser.includes(each.courseId)}
+                          aria-controls="example-collapse-text"
+                        >
+                          View details
+                        </Button>
+                      )}
                     </div>
 
-                    <Collapse in={each.viewDeatils}>
-                      <div
-                        id="example-collapse-text "
-                        className="d-flex flex-column justify-content-around gap-5"
-                      >
-                        <div>
-                          {each.level.map((eachitem, index) => (
-                            <div className="d-flex flex-column justify-content-around gap-5 ">
-                              <h3>
-                                <strong>{eachitem.levelName}</strong>
-                              </h3>
-                              <ReactPlayer
-                                className="react-player"
-                                controls={true}
-                                url={eachitem.levelVideo}
-                                width="30%"
-                                height="30%"
-                                onProgress={(progress) =>
-                                  handleProgress(
-                                    progress,
-                                    eachitem.levelId,
-                                    each.courseId
-                                  )
-                                }
-                              ></ReactPlayer>
-                              {watchedCoursesList.includes(eachitem.levelId) ? (
-                                <button className="btn btn-success" disabled>
-                                  Watched
-                                </button>
-                              ) : (
-                                <button className="btn btn-primary" disabled>
-                                  Pending
-                                </button>
-                              )}
-                              <h6>Video Description:</h6>
-                              <p>{eachitem.levelName} Provides.....</p>
-                            </div>
-                          ))}
-                        </div>
+                    {each.viewDetails ? (
+                      <div>
+                        {each.level.map((eachitem, index) => (
+                          <div className="d-flex flex-column justify-content-around gap-5 ">
+                            <h3>
+                              <strong>{eachitem.levelName}</strong>
+                            </h3>
+                            <ReactPlayer
+                              className="react-player"
+                              controls={true}
+                              url={eachitem.levelVideo}
+                              width="30%"
+                              height="30%"
+                              onProgress={(progress) =>
+                                handleProgress(
+                                  progress,
+                                  eachitem.levelId,
+                                  each.courseId
+                                )
+                              }
+                            ></ReactPlayer>
+                            {watchedCoursesList.includes(eachitem.levelId) ? (
+                              <button className="btn btn-success" disabled>
+                                Watched
+                              </button>
+                            ) : (
+                              <button className="btn btn-primary" disabled>
+                                Pending
+                              </button>
+                            )}
+                            <h6>Video Description:</h6>
+                            <p>{eachitem.levelName} Provides.....</p>
+                          </div>
+                        ))}
                       </div>
-                    </Collapse>
+                    ) : null}
                   </Card.Body>
                 </Card>
               </Col>

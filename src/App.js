@@ -1,49 +1,28 @@
-import logo from "./logo.svg";
 import "./App.css";
-import NavBar from "./Nav/nav";
-import {
-  createBrowserRouter,
-  Routes,
-  Route,
-  Link,
-  Redirect,
-  Navigate,
-  BrowserRouter as Router,
-  Outlet,
-} from "react-router-dom";
-
+import NavigationBar from "./navigation/NavigationBar";
+import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import Login from "./Components/login/Login";
-import Register from "./Components/login/register";
+import Register from "./Components/login/Register";
 import Courses from "./Components/courses/Courses";
 import Protected from "./protected";
 import About from "./Components/about/About";
+import Home from "./Components/Home/Home";
 
 function App() {
   return (
-
     <div className="App">
-    
       <Router>
-        <div className="App">
-          <NavBar></NavBar>
-          
-          <>
-            <Routes>
-              <Route path="/login" element={<Login></Login>} />
-              <Route path="/register" element={<Register></Register>} />
-              <Route
-                path="/courses"
-                element={<Protected Component={Courses}></Protected>}
-              />
-              <Route
-                path="/about"
-                element={<Protected Component={About}></Protected>}
-              />
-            </Routes>
-            
-         
-          </>
-        </div>
+          <NavigationBar />
+          <Routes>
+            <Route path="/home" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route
+              path="/courses"
+              element={<Protected Component={Courses}></Protected>}
+            />
+          </Routes>
       </Router>
     </div>
   );

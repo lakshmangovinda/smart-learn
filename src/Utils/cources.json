@@ -4,7 +4,7 @@
     "courseId": "CS101",
     "courseName": "Introduction to Computer Science",
     "courseImg": "./images/computer.png",
-    "viewDeatils": false,
+    "viewDetails": false,
     "level": [
       {
         "levelId": 1,
@@ -43,7 +43,7 @@
     "courseId": "WEBDEV101",
     "courseName": "Web Development",
     "courseImg": "./images/web.jpg",
-    "viewDeatils": false,
+    "viewDetails": false,
     "level": [
       {
         "levelId": 1,
@@ -112,7 +112,7 @@
     "courseId": "AICOURSE101",
     "courseName": "Artificial Intelligence",
     "courseImg": "./images/AI.png",
-    "viewDeatils": false,
+    "viewDetails": false,
     "level": [
       {
         "levelId": 1,
